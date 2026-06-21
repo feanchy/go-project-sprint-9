@@ -8,8 +8,6 @@ import (
 	"time"
 )
 
-var mu sync.Mutex
-
 // Generator генерирует числа 1,2,3... и вызывает fn для каждого числа
 func Generator(ctx context.Context, ch chan<- int64, fn func(int64)) {
 	defer close(ch)
@@ -40,6 +38,7 @@ func Worker(in <-chan int64, out chan<- int64) {
 
 func main() {
 	chIn := make(chan int64)
+	var mu sync.Mutex
 
 	// контекст с таймаутом 1 секунда
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
